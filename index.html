@@ -40,6 +40,28 @@
     </select>
   </div>
 
+  <hr>
+
+  <h1>加速度と歩数計算</h1>
+
+  <div id="acceleration">
+    <p>x軸の値: <span id="ax"></span></p>
+    <p>y軸の値: <span id="ay"></span></p>
+    <p>z軸の値: <span id="az"></span></p>
+  </div>
+
+  <div id="modeSelection">
+    <label for="modeSelect">モード選択:</label>
+    <select id="modeSelect" onchange="changeMode()">
+      <option value="normal">歩数計</option>
+      <option value="smartphone">歩きスマホ</option>
+    </select>
+  </div>
+
+  <p>歩数: <span id="stepCountMode">0</span></p>
+
+  <button onclick="startSensors()">Start Sensors</button>
+
   <script>
     var locationDataElement = document.getElementById("locationData");
     var distanceElement = document.getElementById("distance");
@@ -139,7 +161,18 @@
     let stepCount = 0;
     let lastOrientation = { alpha: 0, beta: 0, gamma: 0 };
 
-    function startSensor() {
+    var aX = 0, aY = 0, aZ = 0;
+
+    function startSensors() {
+      // アクセルセンサ
+      window.addEventListener("devicemotion", (dat) => {
+        aX = dat.accelerationIncludingGravity.x;
+        aY = dat.accelerationIncludingGravity.y;
+        aZ = dat.accelerationIncludingGravity.z;
+        displayAcceleration();
+      });
+
+      // ジャイロセンサ
       DeviceOrientationEvent.requestPermission().then(function (response) {
         if (response === 'granted') {
           window.addEventListener("deviceorientation", handleOrientation);
@@ -150,61 +183,53 @@
       });
     }
 
+    function displayAcceleration() {
+      document.getElementById("ax").innerText = aX.toFixed(2);
+      document.getElementById("ay").innerText = aY.toFixed(2);
+      document.getElementById("az").innerText = aZ.toFixed(2);
+    }
+
     function handleOrientation(e) {
       e.preventDefault();
 
-      var dir = e.alpha;   // 北極方向に対する向きの角度
-      var fb = e.beta;      // 前後の傾き角度
-      var lr = e.gamma;     // 左右の傾き角度
+      var dir = e.alpha;
+      var fb = e.beta;
+      var lr = e.gamma;
 
       document.getElementById("dir").innerText = dir.toFixed(2);
       document.getElementById("fb").innerText = fb.toFixed(2);
       document.getElementById("lr").innerText = lr.toFixed(2);
 
-      // 各軸の変化量の合計が100を超えた場合に歩数を増やす
-      /*
-      var deltaOrientation = Math.abs(dir - lastOrientation.alpha) +
-                             Math.abs(fb - lastOrientation.beta) +
-                             Math.abs(lr - lastOrientation.gamma);
-
-      if (deltaOrientation > 180) {
-        stepCount++;
-        document.getElementById("stepCount").innerText = stepCount;
-      }
-      */
-      if (dir > 180) {
+      if (selectedMode === "normal") {
         var deltaOrientation = Math.abs(dir - lastOrientation.alpha) +
           Math.abs(fb - lastOrientation.beta) +
           Math.abs(lr - lastOrientation.gamma);
 
         if (deltaOrientation > 180) {
           stepCount++;
-          document.getElementById("stepCount").innerText = stepCount;
+          document.getElementById("stepCountMode").innerText = stepCount;
         }
-      } else if (-365 < dir < -180) {
-        var deltaOrientation = (Math.abs(dir - lastOrientation.alpha) / 2) +
-          Math.abs(fb - lastOrientation.beta) +
-          Math.abs(lr - lastOrientation.gamma);
-
-        if (deltaOrientation > 180) {
-          stepCount++;
-          document.getElementById("stepCount").innerText = stepCount;
-        }
-      } else {
-        var deltaOrientation = (Math.abs(dir - lastOrientation.alpha) / 2) +
-          Math.abs(fb - lastOrientation.beta) +
-          Math.abs(lr - lastOrientation.gamma);
-
-        if (deltaOrientation > 180) {
-          stepCount++;
-          document.getElementById("stepCount").innerText = stepCount;
+      } else if (selectedMode === "smartphone") {
+        // y軸の変化が2以上のときに歩数を増加
+        var deltaY = Math.abs(aY - lastOrientation.y);
+        if (deltaY > 1 && deltaY < 2) {
+          stepCount += 0.25;
+          if (stepCount % 1 == 0) {
+            document.getElementById("stepCountMode").innerText = stepCount;
+          }
         }
       }
 
-      // 現在の向きを保存
       lastOrientation.alpha = dir;
       lastOrientation.beta = fb;
       lastOrientation.gamma = lr;
+      lastOrientation.y = aY;
+    }
+
+    function changeMode() {
+      selectedMode = document.getElementById("modeSelect").value;
+      stepCount = 0;
+      document.getElementById("stepCountMode").innerText = stepCount;
     }
 
     // 開始ボタンと停止ボタンのクリックイベント
