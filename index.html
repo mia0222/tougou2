@@ -70,6 +70,7 @@
     var watchID = null; // 位置情報の監視ID
     var lastPosition = null;
     var totalDistance = 0; // 移動距離の累積
+    var selectedMode = "normal";
 
     function calculateDistance(lat1, lon1, lat2, lon2) {
       var R = 6371; // Radius of the Earth in kilometers
@@ -227,8 +228,8 @@
 
     function changeMode() {
       selectedMode = document.getElementById("modeSelect").value;
-      stepCount = 0;
-      document.getElementById("stepCountMode").innerText = stepCount;
+      //stepCount = 0;
+      //document.getElementById("stepCountMode").innerText = stepCount;
     }
 
     // 開始ボタンと停止ボタンのクリックイベント
