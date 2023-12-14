@@ -57,8 +57,6 @@
     </select>
   </div>
 
-  <p>歩数: <span id="stepCountMode">0</span></p>
-
   <button onclick="startSensors()">Start Sensors</button>
 
   <script>
@@ -70,6 +68,7 @@
     var watchID = null; // 位置情報の監視ID
     var lastPosition = null;
     var totalDistance = 0; // 移動距離の累積
+    var stepCountElement = document.getElementById("stepCount");
     var selectedMode = "normal";
 
     function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -207,7 +206,7 @@
 
         if (deltaOrientation > 180) {
           stepCount++;
-          document.getElementById("stepCountMode").innerText = stepCount;
+          stepCountElement.innerText = stepCount;
         }
       } else if (selectedMode === "smartphone") {
         // y軸の変化が2以上のときに歩数を増加
@@ -215,7 +214,7 @@
         if (deltaY > 1 && deltaY < 2) {
           stepCount += 0.25;
           if (stepCount % 1 == 0) {
-            document.getElementById("stepCountMode").innerText = stepCount;
+            stepCountElement.innerText = stepCount;
           }
         }
       }
@@ -228,8 +227,7 @@
 
     function changeMode() {
       selectedMode = document.getElementById("modeSelect").value;
-      //stepCount = 0;
-      //document.getElementById("stepCountMode").innerText = stepCount;
+      // ここで歩数をリセットしないように変更
     }
 
     // 開始ボタンと停止ボタンのクリックイベント
