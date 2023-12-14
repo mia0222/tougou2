@@ -200,13 +200,16 @@
       document.getElementById("lr").innerText = lr.toFixed(2);
 
       if (selectedMode === "normal") {
-        var deltaOrientation = Math.abs(dir - lastOrientation.alpha) +
+        var deltaOrientation = 
+          Math.abs(dir - lastOrientation.alpha) +
           Math.abs(fb - lastOrientation.beta) +
           Math.abs(lr - lastOrientation.gamma);
 
         if (deltaOrientation > 180) {
-          stepCount++;
-          stepCountElement.innerText = stepCount;
+          stepCount += 0.25;
+          if (stepCount % 1 == 0) {
+            stepCountElement.innerText = stepCount;
+          }
         }
       } else if (selectedMode === "smartphone") {
         // y軸の変化が2以上のときに歩数を増加
