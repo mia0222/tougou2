@@ -16,6 +16,11 @@
     <p>前後の傾き角度: <span id="fb"></span></p>
     <p>左右の傾き角度: <span id="lr"></span></p>
   </div>
+  <div id="acceleration">
+    <p>x軸の値: <span id="ax"></span></p>
+    <p>y軸の値: <span id="ay"></span></p>
+    <p>z軸の値: <span id="az"></span></p>
+  </div>
 
   <p id="locationData">位置情報はここに表示されます.</p>
   <p id="distance">移動距離: 0 メートル</p>
@@ -23,7 +28,6 @@
 
   <p>歩数: <span id="stepCount">0</span></p>
   <button id="startButton">開始</button>
-  <button onclick="startSensor()">Start Sensor</button>
   <button id="stopButton">停止</button>
 
   <div>
@@ -38,17 +42,6 @@
       <!-- 他の活動の種類を追加 -->
     </select>
   </div>
-
-  <hr>
-
-  <h1>加速度と歩数計算</h1>
-
-  <div id="acceleration">
-    <p>x軸の値: <span id="ax"></span></p>
-    <p>y軸の値: <span id="ay"></span></p>
-    <p>z軸の値: <span id="az"></span></p>
-  </div>
-
   <div id="modeSelection">
     <label for="modeSelect">モード選択:</label>
     <select id="modeSelect" onchange="changeMode()">
