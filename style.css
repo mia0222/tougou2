@@ -16,11 +16,12 @@ p{
 }
 label {
     margin-bottom:5px;
-    margin-left:200px;
+    margin-left:auto;
     font-size: 20px;
     font-weight:bold;
   }
 input{
+    display: block;
     text-align:center;
     margin:0 auto;
     margin-left:0;
@@ -38,6 +39,7 @@ button{
     font-weight:bold;
 }
 select{
+    display: block;
     text-align:center;
     margin:0 auto;
     margin-left:0;
@@ -56,14 +58,23 @@ select{
     margin-bottom:20px;
 }
 #m{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:40px;
     margin-left:100px;
+    margin-bottom:20px;
 }
 #activityTypeInput{
     margin-bottom:20px;
 }
 #modeSelection{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:40px;
     margin-left:100px;
-    margin-bottom:30px;
+    margin-bottom:20px;
 }
 #sub{
     border: 10px solid greenyellow;
