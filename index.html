@@ -128,14 +128,15 @@
 
     function startLocationTracking() {
       if ("geolocation" in navigator) {
-        // 位置情報の監視を開始
-        watchID = navigator.geolocation.watchPosition(displayLocation, function (error) {
-          console.error("位置情報の取得に失敗しました: " + error.message);
-        }, { enableHighAccuracy: true }); // 高精度な位置情報を要求
-        startButton.disabled = true;
-        stopButton.disabled = false;
+          // 位置情報の監視を開始
+          watchID = setInterval(function(){navigator.geolocation.getCurrentPosition(displayLocation, function (error) {
+              console.error("位置情報の取得に失敗しました: " + error.message);
+          }, { enableHighAccuracy: true }); // 高精度な位置情報を要求
+      },5000);
+          startButton.disabled = true;
+          stopButton.disabled = false;
       } else {
-        console.error("Geolocationがサポートされていません");
+          console.error("Geolocationがサポートされていません");
       }
     }
 
