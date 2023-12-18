@@ -5,36 +5,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>プログラムの統合</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 
 <body>
-  <h1>プログラムの統合</h1>
-
+  <h1>健康管理</h1>
+<!--
+  <div id="sub">
   <div id="deviceorientation">
-    <p>北極方向に対する向き: <span id="dir"></span></p>
-    <p>前後の傾き角度: <span id="fb"></span></p>
-    <p>左右の傾き角度: <span id="lr"></span></p>
+      <p>北極方向に対する向き: <span id="dir"></span></p>
+      <p>前後の傾き角度: <span id="fb"></span></p>
+      <p>左右の傾き角度: <span id="lr"></span></p>
+    </div>
+    <div id="acceleration">
+      <p>x軸の値: <span id="ax"></span></p>
+      <p>y軸の値: <span id="ay"></span></p>
+      <p>z軸の値: <span id="az"></span></p>
+    </div>
   </div>
-  <div id="acceleration">
-    <p>x軸の値: <span id="ax"></span></p>
-    <p>y軸の値: <span id="ay"></span></p>
-    <p>z軸の値: <span id="az"></span></p>
+-->
+  <div id="main">
+    <p id="locationData">位置情報はここに表示されます.</p>
+    <p id="distance">移動距離: 0 メートル</p>
+    <p id="calories">消費カロリー: 0 kcal</p>
+
+    <p>歩数: <span id="stepCount">0</span></p>
   </div>
-
-  <p id="locationData">位置情報はここに表示されます.</p>
-  <p id="distance">移動距離: 0 メートル</p>
-  <p id="calories">消費カロリー: 0 kcal</p>
-
-  <p>歩数: <span id="stepCount">0</span></p>
-  <button id="startButton">開始</button>
-  <button id="stopButton">停止</button>
-
-  <div>
+  <div id="w">
     <label for="weightInput">体重（kg）:</label>
     <input type="number" id="weightInput" step="0.1">
   </div>
-  <div>
+
+  <div id="m">
     <label for="activityTypeInput">活動の種類:</label>
     <select id="activityTypeInput">
       <option value="walking">ウォーキング</option>
@@ -42,6 +45,10 @@
       <!-- 他の活動の種類を追加 -->
     </select>
   </div>
+
+  <button id="startButton">開始</button>
+  <button id="stopButton">停止</button>
+
   <div id="modeSelection">
     <label for="modeSelect">モード選択:</label>
     <select id="modeSelect" onchange="changeMode()">
@@ -50,7 +57,7 @@
     </select>
   </div>
 
-  <button onclick="startSensors()">Start Sensors</button>
+  <button id="b"onclick="startSensors()">Start Sensors</button>
 
   <script>
     var locationDataElement = document.getElementById("locationData");
