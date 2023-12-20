@@ -95,14 +95,3 @@ select{
     padding: 10px;
     margin:10px;
 }
-@media only screen and (max-width: 750px) {
-    h1 {
-        font-size: 30px;
-    }
-
-    input,
-    select,
-    button {
-        width: 100%;
-    }
-}
