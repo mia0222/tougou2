@@ -13,16 +13,16 @@
   <h1>健康管理</h1>
 
   <div id="sub">
-    <div id="deviceorientation">
-        <p>北極方向に対する向き: <span id="dir"></span></p>
-        <p>前後の傾き角度: <span id="fb"></span></p>
-        <p>左右の傾き角度: <span id="lr"></span></p>
-      </div>
-      <div id="acceleration">
-        <p>x軸の値: <span id="ax"></span></p>
-        <p>y軸の値: <span id="ay"></span></p>
-        <p>z軸の値: <span id="az"></span></p>
-      </div>
+  <div id="deviceorientation">
+      <p>北極方向に対する向き: <span id="dir"></span></p>
+      <p>前後の傾き角度: <span id="fb"></span></p>
+      <p>左右の傾き角度: <span id="lr"></span></p>
+    </div>
+    <div id="acceleration">
+      <p>x軸の値: <span id="ax"></span></p>
+      <p>y軸の値: <span id="ay"></span></p>
+      <p>z軸の値: <span id="az"></span></p>
+    </div>
   </div>
 
   <div id="main">
@@ -32,12 +32,12 @@
 
     <p>歩数: <span id="stepCount">0</span></p>
   </div>
-  <div id="w">
+  <div id="weight">
     <label for="weightInput">体重（kg）:</label>
     <input type="number" id="weightInput" step="0.1">
   </div>
 
-  <div id="m">
+  <div id="mode">
     <label for="activityTypeInput">活動の種類:</label>
     <select id="activityTypeInput">
       <option value="walking">ウォーキング</option>
@@ -57,7 +57,7 @@
     </select>
   </div>
 
-  <button id="b"onclick="startSensors()">Start Sensors</button>
+  <button id="start"onclick="startSensors()">Start Sensors</button>
 
   <script>
     var locationDataElement = document.getElementById("locationData");
@@ -71,6 +71,7 @@
     var stepCountElement = document.getElementById("stepCount");
     var selectedMode = "normal";
 
+    //距離計算
     function calculateDistance(lat1, lon1, lat2, lon2) {
       var R = 6371; // Radius of the Earth in kilometers
       var dLat = deg2rad(lat2 - lat1);
@@ -88,6 +89,7 @@
       return deg * (Math.PI / 180);
     }
 
+    //geolocation
     function displayLocation(position) {
       var latitude = position.coords.latitude;
       var longitude = position.coords.longitude;
