@@ -63,6 +63,8 @@
   <button id="start" onclick="startSensors()">Start Sensors</button>
 
   <script>
+    var proximityThreshold = 0.01; // 目標地点の近くと判断する閾値（度単位）
+
     var locationDataElement = document.getElementById("locationData");
     var distanceElement = document.getElementById("distance");
     var caloriesElement = document.getElementById("calories");
@@ -74,13 +76,16 @@
     var stepCountElement = document.getElementById("stepCount");
     var selectedMode = "normal";
     var passMessageElement = document.getElementById("passMessage");
+
+    // 目標地点の配列
     var targetLocations = [
-      { name: "新潟職業能力開発短期大学校", latitude: 37.9529612, longitude: 139.3415519 },
+      { name: "目標1", latitude: 35.6895, longitude: 139.6917 },
       { name: "目標2", latitude: 36.1234, longitude: 140.5678 },
       // 他にも目標地点を追加
     ];
+
+    // 現在の目標地点
     var currentTargetIndex = 0;
-    var proximityThreshold = 0.01;
 
     //距離計算
     function calculateDistance(lat1, lon1, lat2, lon2) {
