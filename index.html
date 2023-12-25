@@ -63,7 +63,7 @@
   <button id="start" onclick="startSensors()">Start Sensors</button>
 
   <script>
-    var proximityThreshold = 0.01; // 目標地点の近くと判断する閾値（度単位）
+    var proximityThreshold = 0.1; // 目標地点の近くと判断する閾値（度単位）
 
     var locationDataElement = document.getElementById("locationData");
     var distanceElement = document.getElementById("distance");
@@ -144,9 +144,11 @@
 
     // 目標地点に近づいたかどうかを判断する関数
     function isCloseToTargetLocation(latitude, longitude) {
-      var target = targetLocations[currentTargetIndex];
-      var distance = calculateDistance(latitude, longitude, target.latitude, target.longitude);
-      return distance < proximityThreshold;
+      
+      return (
+        Math.abs(latitude - targetLocations.latitude) < proximityThreshold &&
+        Math.abs(longitude - targetLocations.longitude) < proximityThreshold
+      );
     }
 
     function calculateCaloriesBurned(distance, weight, activityType) {
