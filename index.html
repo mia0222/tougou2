@@ -13,7 +13,7 @@
   <h1>健康管理</h1>
 
   <div id="sub">
-  <div id="deviceorientation">
+    <div id="deviceorientation">
       <p>北極方向に対する向き: <span id="dir"></span></p>
       <p>前後の傾き角度: <span id="fb"></span></p>
       <p>左右の傾き角度: <span id="lr"></span></p>
@@ -57,7 +57,10 @@
     </select>
   </div>
 
-  <button id="start"onclick="startSensors()">Start Sensors</button>
+  <!-- メッセージを表示する新しい div -->
+  <div id="passMessage"></div>
+
+  <button id="start" onclick="startSensors()">Start Sensors</button>
 
   <script>
     var locationDataElement = document.getElementById("locationData");
@@ -70,10 +73,13 @@
     var totalDistance = 0; // 移動距離の累積
     var stepCountElement = document.getElementById("stepCount");
     var selectedMode = "normal";
+    var passMessageElement = document.getElementById("passMessage");
+    var targetLocation = { latitude: 35.6895, longitude: 139.6917 }; // 目標の場所に置き換えてください
+    var proximityThreshold = 0.0001; // 近づいたと判断するしきい値（必要に応じて調整）
 
     //距離計算
     function calculateDistance(lat1, lon1, lat2, lon2) {
-      var R = 6371; // Radius of the Earth in kilometers
+      var R = 6371; // 地球の半径（キロメートル）
       var dLat = deg2rad(lat2 - lat1);
       var dLon = deg2rad(lon2 - lon1);
       var a =
@@ -81,7 +87,7 @@
         Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
       var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      var distance = R * c * 1000; // Convert to meters
+      var distance = R * c * 1000; // メートルに変換
       return distance;
     }
 
@@ -117,7 +123,23 @@
         caloriesElement.innerHTML = "消費カロリー: " + caloriesBurned.toFixed(2) + " kcal";
       }
 
+      // 現在の場所が目標の場所に近づいたかどうかを確認
+      if (isCloseToTargetLocation(latitude, longitude)) {
+        passMessageElement.innerText = "目標の場所に近づきました！";
+        stopLocationTracking(); // 目標地点に到達したら位置情報のトラッキングを停止
+      } else {
+        passMessageElement.innerText = ""; // 目標の場所に近づいていない場合はメッセージをクリア
+      }
+
       lastPosition = position;
+    }
+
+    function isCloseToTargetLocation(latitude, longitude) {
+      // 現在の場所が目標の場所に十分に近いかどうかを確認
+      return (
+        Math.abs(latitude - targetLocation.latitude) < proximityThreshold &&
+        Math.abs(longitude - targetLocation.longitude) < proximityThreshold
+      );
     }
 
     function calculateCaloriesBurned(distance, weight, activityType) {
@@ -137,15 +159,16 @@
 
     function startLocationTracking() {
       if ("geolocation" in navigator) {
-          // 位置情報の監視を開始
-          watchID = setInterval(function(){navigator.geolocation.getCurrentPosition(displayLocation, function (error) {
-              console.error("位置情報の取得に失敗しました: " + error.message);
+        // 位置情報の監視を開始
+        watchID = setInterval(function () {
+          navigator.geolocation.getCurrentPosition(displayLocation, function (error) {
+            console.error("位置情報の取得に失敗しました: " + error.message);
           }, { enableHighAccuracy: true }); // 高精度な位置情報を要求
-      },5000);
-          startButton.disabled = true;
-          stopButton.disabled = false;
+        }, 5000);
+        startButton.disabled = true;
+        stopButton.disabled = false;
       } else {
-          console.error("Geolocationがサポートされていません");
+        console.error("Geolocationがサポートされていません");
       }
     }
 
@@ -203,7 +226,7 @@
       document.getElementById("lr").innerText = lr.toFixed(2);
 
       if (selectedMode === "normal") {
-        var deltaOrientation = 
+        var deltaOrientation =
           Math.abs(dir - lastOrientation.alpha) +
           Math.abs(fb - lastOrientation.beta) +
           Math.abs(lr - lastOrientation.gamma);
