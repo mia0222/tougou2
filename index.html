@@ -32,7 +32,7 @@
 
     <p>歩数: <span id="stepCount">0</span></p>
      <!-- メッセージを表示する新しい div -->
-    <p id="passMessage"></p>
+    <p id="passMessage">特定の場所に近づくとメッセージが表示されます</p>
   </div>
   <div id="weight">
     <label for="weightInput">体重（kg）:</label>
@@ -126,7 +126,7 @@
 
       // 現在の場所が目標の場所に近づいたかどうかを確認
       if (isCloseToTargetLocation(latitude, longitude)) {
-        passMessageElement.innerText = "目標の場所に近づきました！";
+        passMessageElement.innerText = "新潟職業能力開発短期大学校に近づきました！";
         stopLocationTracking(); // 目標地点に到達したら位置情報のトラッキングを停止
       } else {
         passMessageElement.innerText = ""; // 目標の場所に近づいていない場合はメッセージをクリア
