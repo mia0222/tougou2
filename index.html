@@ -63,8 +63,6 @@
   <button id="start" onclick="startSensors()">Start Sensors</button>
 
   <script>
-    var proximityThreshold = 0.1; // 目標地点の近くと判断する閾値（度単位）
-
     var locationDataElement = document.getElementById("locationData");
     var distanceElement = document.getElementById("distance");
     var caloriesElement = document.getElementById("calories");
@@ -76,16 +74,8 @@
     var stepCountElement = document.getElementById("stepCount");
     var selectedMode = "normal";
     var passMessageElement = document.getElementById("passMessage");
-
-    // 目標地点の配列
-    var targetLocations = [
-      { name: "新潟職業能力開発短期大学校", latitude: 37.9529 , longitude: 139.3415 },
-      { name: "目標2", latitude: 36.1234, longitude: 140.5678 },
-      // 他にも目標地点を追加
-    ];
-
-    // 現在の目標地点
-    var currentTargetIndex = 0;
+    var targetLocation = { latitude: 37.9559294, longitude: 139.3382619 }; // 目標の場所に置き換えてください
+    var proximityThreshold = 0.001; // 近づいたと判断するしきい値（必要に応じて調整）
 
     //距離計算
     function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -131,23 +121,24 @@
         var activityType = document.getElementById("activityTypeInput").value; // ユーザーが選択した活動の種類
         var caloriesBurned = calculateCaloriesBurned(totalDistance, weight, activityType);
         caloriesElement.innerHTML = "消費カロリー: " + caloriesBurned.toFixed(2) + " kcal";
+      }
 
-        // 目標地点に近づいたらメッセージ表示
-        if (isCloseToTargetLocation(latitude, longitude)) {
-          passMessageElement.innerHTML = targetLocations[currentTargetIndex].name + "の前を通りました。";
-          currentTargetIndex++; // 次の目標地点へ
-        }
+      // 現在の場所が目標の場所に近づいたかどうかを確認
+      if (isCloseToTargetLocation(latitude, longitude)) {
+        passMessageElement.innerText = "目標の場所に近づきました！";
+        stopLocationTracking(); // 目標地点に到達したら位置情報のトラッキングを停止
+      } else {
+        passMessageElement.innerText = ""; // 目標の場所に近づいていない場合はメッセージをクリア
       }
 
       lastPosition = position;
     }
 
-    // 目標地点に近づいたかどうかを判断する関数
     function isCloseToTargetLocation(latitude, longitude) {
-      
+      // 現在の場所が目標の場所に十分に近いかどうかを確認
       return (
-        Math.abs(latitude - targetLocations.latitude) < proximityThreshold &&
-        Math.abs(longitude - targetLocations.longitude) < proximityThreshold
+        Math.abs(latitude - targetLocation.latitude) < proximityThreshold &&
+        Math.abs(longitude - targetLocation.longitude) < proximityThreshold
       );
     }
 
