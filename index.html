@@ -130,7 +130,7 @@
       lastPosition = position;
     }
     function isTargetLocation(latitude,longitude){
-      var threshold = 0.0001;
+      var threshold = 0.001;
       return(
         Matn.abs(latitude - targetLocation.latitude)<threshold &&
         Math.abs(longitude - targetLocation.longitude) < threshold
