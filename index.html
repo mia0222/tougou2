@@ -145,8 +145,8 @@
     function isCloseToTargetLocation(latitude, longitude) {
       // 現在の場所が目標の場所に十分に近いかどうかを確認
       return (
-        Math.abs(latitude - targetLocation.latitude) < proximityThreshold &&
-        Math.abs(longitude - targetLocation.longitude) < proximityThreshold
+        Math.abs(latitude - targetLocations.latitude) < proximityThreshold &&
+        Math.abs(longitude - targetLocations.longitude) < proximityThreshold
       );
     }
 
