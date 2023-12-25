@@ -58,7 +58,6 @@
   </div>
 
   <button id="start"onclick="startSensors()">Start Sensors</button>
-  <div id = "passMesage"></div>
 
   <script>
     var locationDataElement = document.getElementById("locationData");
@@ -66,8 +65,6 @@
     var caloriesElement = document.getElementById("calories");
     var startButton = document.getElementById("startButton");
     var stopButton = document.getElementById("stopButton");
-    var passMessageElement = document.getElementById("passMessage");
-    var targetLocation = {latitude:139.3382619,longitude:37.9559294};
     var watchID = null; // 位置情報の監視ID
     var lastPosition = null;
     var totalDistance = 0; // 移動距離の累積
@@ -102,13 +99,6 @@
       locationDataElement.innerHTML = "緯度: " + latitude + "<br>経度: " + longitude + "<br>精度: " + accuracy +
         " メートル<br>取得時刻: " + timestamp;
 
-        // 現在の場所が目標の場所であるかどうかを確認
-      if (isTargetLocation(latitude, longitude)) {
-        passMessageElement.innerText = "特定の場所を通りました！";
-        stopLocationTracking(); // 必要に応じて、自動的にトラッキングを停止することもできます
-      } else {
-        passMessageElement.innerText = ""; // 目標の場所でない場合はメッセージをクリア
-      }
       // 移動距離を計算
       if (lastPosition) {
         var lastLat = lastPosition.coords.latitude;
@@ -128,13 +118,6 @@
       }
 
       lastPosition = position;
-    }
-    function isTargetLocation(latitude,longitude){
-      var threshold = 0.001;
-      return(
-        Matn.abs(latitude - targetLocation.latitude)<threshold &&
-        Math.abs(longitude - targetLocation.longitude) < threshold
-      );
     }
 
     function calculateCaloriesBurned(distance, weight, activityType) {
