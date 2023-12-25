@@ -32,7 +32,6 @@
 
     <p>歩数: <span id="stepCount">0</span></p>
   </div>
-  <div id="passMessage"></div>
   <div id="weight">
     <label for="weightInput">体重（kg）:</label>
     <input type="number" id="weightInput" step="0.1">
@@ -58,6 +57,9 @@
     </select>
   </div>
 
+  <!-- メッセージを表示する新しい div -->
+  <div id="passMessage"></div>
+
   <button id="start" onclick="startSensors()">Start Sensors</button>
 
   <script>
@@ -72,8 +74,13 @@
     var stepCountElement = document.getElementById("stepCount");
     var selectedMode = "normal";
     var passMessageElement = document.getElementById("passMessage");
-    var targetLocation = { latitude: 37.9559294, longitude: 139.3382619 }; // 目標の場所に置き換えてください
-    var proximityThreshold = 0.01; // 近づいたと判断するしきい値（必要に応じて調整）
+    var targetLocations = [
+      { name: "目標1", latitude: 35.6895, longitude: 139.6917 },
+      { name: "目標2", latitude: 36.1234, longitude: 140.5678 },
+      // 他にも目標地点を追加
+    ];
+    var currentTargetIndex = 0;
+    var proximityThreshold = 0.0001;
 
     //距離計算
     function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -121,10 +128,13 @@
         caloriesElement.innerHTML = "消費カロリー: " + caloriesBurned.toFixed(2) + " kcal";
       }
 
-      // 現在の場所が目標の場所に近づいたかどうかを確認
+      // 目標地点に近づいたかどうかの判定
       if (isCloseToTargetLocation(latitude, longitude)) {
-        passMessageElement.innerText = "目標の場所に近づきました！";
+        passMessageElement.innerText = "目標の場所に近づきました！ (" + targetLocations[currentTargetIndex].name + ")";
         stopLocationTracking(); // 目標地点に到達したら位置情報のトラッキングを停止
+
+        // 次の目標地点に移動（配列が最後まで到達した場合は最初に戻る）
+        currentTargetIndex = (currentTargetIndex + 1) % targetLocations.length;
       } else {
         passMessageElement.innerText = ""; // 目標の場所に近づいていない場合はメッセージをクリア
       }
