@@ -75,7 +75,7 @@
     var selectedMode = "normal";
     var passMessageElement = document.getElementById("passMessage");
     var targetLocation = { latitude: 37.9559294, longitude: 139.3382619 }; // 目標の場所に置き換えてください
-    var proximityThreshold = 0.00001; // 近づいたと判断するしきい値（必要に応じて調整）
+    var proximityThreshold = 0.01; // 近づいたと判断するしきい値（必要に応じて調整）
 
     //距離計算
     function calculateDistance(lat1, lon1, lat2, lon2) {
